@@ -1,6 +1,6 @@
 slack-bolt
-PyQt5
-PyQtWebEngine
+PyQt6
+PyQt6-WebEngine
 requests
 pygame
 python-dotenv

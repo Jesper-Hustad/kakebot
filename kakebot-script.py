@@ -2,9 +2,9 @@ import os
 import requests
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtCore import QTimer, QUrl, QObject, pyqtSignal
+from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWebEngineWidgets import QWebEngineView
+from PyQt6.QtCore import QTimer, QUrl, QObject, pyqtSignal
 import sys
 import threading
 import pygame
@@ -141,7 +141,7 @@ def main():
         html_signal.display_html.connect(open_html_fullscreen)
         slack_thread = threading.Thread(target=start_slack_app, daemon=True)
         slack_thread.start()
-        app.exec_()
+        app.exec()
     except Exception as e:
         pass
 
