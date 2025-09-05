@@ -1,0 +1,6 @@
+slack-bolt
+PyQt5
+PyQtWebEngine
+requests
+pygame
+python-dotenv
