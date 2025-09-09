@@ -4,6 +4,11 @@ Funker i slack
 
 Installer med: 
 
+sudo apt install -y chromium-browser chromium-chromedriver python
+
+python -m venv .venv
+source .venv/bin/activate
+
 pip install -r requirements.txt
 
-while true; do python kakebot-script.py; done 
+python kakebot-script.py 

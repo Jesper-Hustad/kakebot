@@ -7,6 +7,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 import os
 from pathlib import Path
+import platform
 
 
 class HTMLFullscreenViewer:
@@ -24,6 +25,8 @@ class HTMLFullscreenViewer:
         self.chrome_options.add_argument('--allow-running-insecure-content')
         self.chrome_options.add_experimental_option('excludeSwitches', ['enable-automation'])
         self.chrome_options.add_experimental_option('useAutomationExtension', False)
+
+        
         
         # Initialize WebDriver
         self.driver = None
@@ -46,9 +49,16 @@ class HTMLFullscreenViewer:
             
             print(f"Opening HTML file: {html_path}")
             
+
+            service = Service(ChromeDriverManager().install())
+
+            if "debian" in platform.version().lower():
+                service = Service("/usr/bin/chromedriver")
+                self.chrome_options.binary_location = "/usr/bin/chromium-browser" 
+
             # Initialize WebDriver
             self.driver = webdriver.Chrome(
-                service=Service(ChromeDriverManager().install()),
+                service=service,
                 options=self.chrome_options
             )
             
