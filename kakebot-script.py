@@ -2,13 +2,11 @@ import os
 import requests
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-from PyQt6.QtWidgets import QApplication
-from PyQt6.QtWebEngineWidgets import QWebEngineView
-from PyQt6.QtCore import QTimer, QUrl, QObject, pyqtSignal
 import sys
 import threading
 import pygame
 from dotenv import load_dotenv
+from window import open_html_fullscreen
 
 load_dotenv()  # Load environment variables from .env file
 
@@ -79,21 +77,6 @@ def generate_slackbot_html(text, file_name):
     return html_content
 
 
-def open_html_fullscreen(html_content):
-    try:
-        with open("index.html", "w", encoding="utf-8") as html_file:
-            html_file.write(html_content)
-
-        view = QWebEngineView()
-        view.setUrl(QUrl.fromLocalFile(os.path.abspath("index.html")))
-        view.showFullScreen()
-
-        play_audio()
-
-        QTimer.singleShot(duration * 1000, lambda: view.close())
-    except Exception as e:
-        pass
-
 def download_image(image_url, token):
     try:
         file_type = image_url.split(".")[-1]
@@ -111,7 +94,12 @@ def download_image(image_url, token):
 def activate_kakebot(text, file_name):
     try:
         html_content = generate_slackbot_html(text, file_name)
+        # write to index.html locally
+        with open("index.html", "w", encoding="utf-8") as file:
+            file.write(html_content)
+
         html_signal.display_html.emit(html_content, 5)
+        play_audio()
     except Exception as e:
         pass
 

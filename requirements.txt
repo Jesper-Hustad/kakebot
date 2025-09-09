@@ -1,6 +1,6 @@
 slack-bolt
-PyQt6
-PyQt6-WebEngine
 requests
 pygame
 python-dotenv
+selenium 
+webdriver-manager
