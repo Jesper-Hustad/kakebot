@@ -87,16 +87,13 @@ def download_image(image_url, token):
         return ""
 
 def activate_kakebot(text, file_name):
-    try:
-        html_content = generate_slackbot_html(text, file_name)
-        # write to index.html locally
-        with open("index.html", "w", encoding="utf-8") as file:
-            file.write(html_content)
+    html_content = generate_slackbot_html(text, file_name)
+    # write to index.html locally
+    with open("index.html", "w", encoding="utf-8") as file:
+        file.write(html_content)
 
-        open_html_fullscreen("index.html", 10)
-        play_audio()
-    except Exception as e:
-        pass
+    open_html_fullscreen("index.html")
+    play_audio()
 
 slack_app = App(token=os.getenv("SLACK_BOT_TOKEN"))
 
