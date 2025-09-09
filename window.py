@@ -93,8 +93,9 @@ import threading
 
 def open_html_fullscreen(path):
     print("Opening fullscreen HTML content")
+    timeout = int(os.getenv("TIMEOUT", 60))
     viewer = HTMLFullscreenViewer()
-    viewer.open_html_fullscreen(path, 10)
+    viewer.open_html_fullscreen(path, timeout)
 
 
 if __name__ == "__main__":
