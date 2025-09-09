@@ -14,10 +14,9 @@ load_dotenv()  # Load environment variables from .env file
 
 
 def play_audio():
-    os.system('cvlc --intf dummy --play-and-exit cookie.mp3')
-    # script_dir = os.path.dirname(os.path.abspath(__file__))
-    # file_path = os.path.join(script_dir, "cookie.mp3")
-
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(script_dir, "cookie.mp3")
+    os.system(f'cvlc --intf dummy --play-and-exit {file_path}')
     # player = vlc.MediaPlayer(file_path)
     # player.play()
         
