@@ -4,26 +4,23 @@ from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 import sys
 import threading
-import pygame
 from dotenv import load_dotenv
 from window import open_html_fullscreen
+# import vlc
+import os
+
 
 load_dotenv()  # Load environment variables from .env file
 
 
 def play_audio():
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(script_dir, "cookie.mp3")
-    def _play():
-        pygame.mixer.init()
-        pygame.mixer.music.load(file_path)
-        pygame.mixer.music.play()
-        # Wait until playback is finished inside the thread
-        while pygame.mixer.music.get_busy():
-            pygame.time.Clock().tick(10)
+    pass
+    # script_dir = os.path.dirname(os.path.abspath(__file__))
+    # file_path = os.path.join(script_dir, "cookie.mp3")
 
-    thread = threading.Thread(target=_play, daemon=True)
-    thread.start()
+    # player = vlc.MediaPlayer(file_path)
+    # player.play()
+        
 
 
 duration=30  # Duration to display HTML in seconds
@@ -122,5 +119,4 @@ def main():
         pass
 
 if __name__ == "__main__":
-    play_audio()
     main()

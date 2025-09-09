@@ -1,6 +1,6 @@
 slack-bolt
 requests
-pygame
+playsound
 python-dotenv
 selenium 
 webdriver-manager
