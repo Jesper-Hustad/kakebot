@@ -82,3 +82,6 @@ import threading
 def open_html_fullscreen():
     viewer = HTMLFullscreenViewer()
     viewer.open_html_fullscreen("index.html", 10)
+
+if __name__ == "__main__":
+    open_html_fullscreen()
