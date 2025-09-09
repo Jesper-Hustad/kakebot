@@ -31,11 +31,6 @@ print("Starting Slack kake bot app...")
 print("Bot Token:", os.getenv("SLACK_BOT_TOKEN"))
 print("App Token:", os.getenv("SLACK_APP_TOKEN"))
 
-class HtmlDisplaySignal(QObject):
-    display_html = pyqtSignal(str, int)
-
-html_signal = HtmlDisplaySignal()
-
 def generate_slackbot_html(text, file_name):
     text = text or "(Ingen tekst inkludert i slack-meldingen)"
     file_name = file_name or ""
@@ -98,7 +93,7 @@ def activate_kakebot(text, file_name):
         with open("index.html", "w", encoding="utf-8") as file:
             file.write(html_content)
 
-        html_signal.display_html.emit(html_content, 5)
+        open_html_fullscreen("index.html", 10)
         play_audio()
     except Exception as e:
         pass
@@ -107,15 +102,14 @@ slack_app = App(token=os.getenv("SLACK_BOT_TOKEN"))
 
 @slack_app.event("message")
 def handle_message_events(body, logger):
-    try:
-        text = body.get("event", {}).get("text", "")
-        image_url = body.get("event", {}).get("files", [{}])[0].get("url_private", "")
-        file_name = ""
-        if image_url:
-            file_name = download_image(image_url, os.getenv("SLACK_BOT_TOKEN"))
-        activate_kakebot(text, file_name)
-    except Exception as e:
-        pass
+    print("Received message event:", body)
+
+    text = body.get("event", {}).get("text", "")
+    image_url = body.get("event", {}).get("files", [{}])[0].get("url_private", "")
+    file_name = ""
+    if image_url:
+        file_name = download_image(image_url, os.getenv("SLACK_BOT_TOKEN"))
+    activate_kakebot(text, file_name)
 
 def start_slack_app():
     try:
@@ -125,11 +119,7 @@ def start_slack_app():
 
 def main():
     try:
-        app = QApplication(sys.argv)
-        html_signal.display_html.connect(open_html_fullscreen)
-        slack_thread = threading.Thread(target=start_slack_app, daemon=True)
-        slack_thread.start()
-        app.exec()
+        start_slack_app()
     except Exception as e:
         pass
 
