@@ -88,9 +88,9 @@ def activate_kakebot(text, file_name):
     # write to index.html locally
     with open("index.html", "w", encoding="utf-8") as file:
         file.write(html_content)
-
-    open_html_fullscreen("index.html")
     play_audio()
+    open_html_fullscreen("index.html")
+    
 
 slack_app = App(token=os.getenv("SLACK_BOT_TOKEN"))
 
