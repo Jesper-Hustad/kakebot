@@ -12,7 +12,8 @@ load_dotenv()  # Load environment variables from .env file
 
 
 def play_audio():
-    file_path = "/Users/Jesper.Forrest.Hustad/Documents/visomelskerkake/cookie.mp3"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(script_dir, "cookie.mp3")
     def _play():
         pygame.mixer.init()
         pygame.mixer.music.load(file_path)
@@ -121,4 +122,5 @@ def main():
         pass
 
 if __name__ == "__main__":
+    play_audio()
     main()
