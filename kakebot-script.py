@@ -16,14 +16,10 @@ load_dotenv()  # Load environment variables from .env file
 def play_audio():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(script_dir, "cookie.mp3")
-    os.system(f'sleep 7 && cvlc --intf dummy --play-and-exit {file_path}')
+    os.system(f'sleep 5 && cvlc --intf dummy --play-and-exit --gain 5 {file_path}')
     # player = vlc.MediaPlayer(file_path)
     # player.play()
         
-
-
-duration=30  # Duration to display HTML in seconds
-
 print("Starting Slack kake bot app...")
 print("Bot Token:", os.getenv("SLACK_BOT_TOKEN"))
 print("App Token:", os.getenv("SLACK_APP_TOKEN"))
@@ -50,7 +46,7 @@ def generate_slackbot_html(text, file_name):
                     position: absolute;
                     top: 10%;
                     text-align: center;
-                    font-size: 2em;
+                    font-size: 3em;
                     color: #333;
                 }}
                 .image {{
