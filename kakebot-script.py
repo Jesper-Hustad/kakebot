@@ -37,7 +37,7 @@ def activate_kakebot(text, file_name):
     script_dir = os.path.dirname(os.path.abspath(__file__))
     os.system(f'(sleep 2 && cvlc --intf dummy --play-and-exit --gain 5 {script_dir}/cookie.mp3)&')
     os.system(f'(firefox --new-tab "file://{script_dir}/index.html")&')
-    os.system(f'sleep 160 && wtype -M ctrl w -m ctrl')
+    os.system(f'(sleep 10 && wtype -M ctrl w -m ctrl)&')
     print("Aktiverer kakebot...")
 
 def er_kake(text, image_url):
