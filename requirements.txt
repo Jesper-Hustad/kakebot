@@ -1,6 +1,3 @@
 slack-bolt
 requests
-playsound
 python-dotenv
-selenium 
-webdriver-manager
