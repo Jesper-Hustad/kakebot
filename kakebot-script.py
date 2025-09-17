@@ -99,7 +99,9 @@ def handle_message_events(body, logger):
     file_name = ""
     if image_url:
         file_name = download_image(image_url, os.getenv("SLACK_BOT_TOKEN"))
-    activate_kakebot(text, file_name)
+
+    if (image_url or "kake" in text.lower()) and ("http" not in text.lower() and "allmøte" not in text.lower()):
+        activate_kakebot(text, file_name)
 
 def start_slack_app():
     try:
