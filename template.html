@@ -11,22 +11,32 @@
                     background-color: #f4f4f4;
                     font-family: Arial, sans-serif;
                 }
+                .logo {
+                    position: absolute;
+                    top: 2%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    height: 140px;
+                    width: auto;
+                    z-index: 10;
+                }
                 .text {
                     position: absolute;
-                    top: 10%;
+                    top: 20%;
                     text-align: center;
                     font-size: 3em;
                     color: #333;
                 }
                 .image {
                     position: absolute;
-                    top: 20%;
+                    top: 28%;
                     width: auto;
-                    height: 80%;
+                    height: 70%;
                 }
             </style>
         </head>
         <body>
+            <img src="logo.png" alt="Logo" class="logo">
             <div class="text">{ TEKST }</div>
             { BILDE }
         </body>
