@@ -4,8 +4,6 @@ Funker i slack
 
 Installer med: 
 
-sudo apt install -y chromium-browser chromium-chromedriver python
-
 python -m venv .venv
 source .venv/bin/activate
 
