@@ -1,27 +1,39 @@
 import os
 import requests
-from dataclasses import dataclass
-from typing import Optional, field
+from dataclasses import dataclass, field
+from typing import Optional
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from dotenv import load_dotenv
 
 load_dotenv()
 
-print("Starting Slack kake bot app...")
-print("Bot Token:", os.getenv("SLACK_BOT_TOKEN"))
-print("App Token:", os.getenv("SLACK_APP_TOKEN"))
+print("Starter kake bot app...")
+SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
+SLACK_APP_TOKEN = os.getenv("SLACK_APP_TOKEN")
+
+if not SLACK_BOT_TOKEN or not SLACK_APP_TOKEN:
+    raise ValueError("SLACK_BOT_TOKEN og SLACK_APP_TOKEN må være satt i .env fil.")
+
+SKJERM_TIMEOUT_SEKUNDER = 160
+print(f"Skjerm timeout er satt til {SKJERM_TIMEOUT_SEKUNDER} sekunder.")
+
 
 @dataclass
-class KakeMelding:
+class Melding:
     text: str
     image_url: Optional[str]
     file_name: str = field(init=False)
 
     def __post_init__(self):
-        self.file_name = download_image(self, os.getenv("SLACK_BOT_TOKEN"))
+        self.file_name = download_image(self, SLACK_BOT_TOKEN)
 
-def generate_slackbot_html(melding: KakeMelding):
+    def er_kake(self):
+        MAX_TEXT_LENGTH = 250
+        innhold = self.text.lower()
+        return (self.image_url or "kake" in innhold) and len(innhold) < MAX_TEXT_LENGTH
+
+def generate_slackbot_html(melding: Melding):
     html_name = "index.html"
     text = melding.text or "(Ingen tekst inkludert i slack-meldingen)"
     bilde_html = f'<img class="image" src="{melding.file_name}" alt="Custom Image">' if melding.file_name else "<h2>[Ingen bilde i slack-meldingen]</h2>"
@@ -34,7 +46,7 @@ def generate_slackbot_html(melding: KakeMelding):
     
     return html_name
 
-def download_image(melding: KakeMelding, token):
+def download_image(melding: Melding, token):
     if not melding.image_url:
         return ""
     try:
@@ -48,35 +60,37 @@ def download_image(melding: KakeMelding, token):
         pass
     return ""
 
-def activate_kakebot(melding: KakeMelding):
+def activate_kakebot(melding: Melding):
     html_name = generate_slackbot_html(melding)
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     os.system(f'(sleep 2 && cvlc --intf dummy --play-and-exit --gain 5 {script_dir}/cookie.mp3)&')
     os.system(f'(firefox --new-tab "file://{script_dir}/{html_name}")&')
-    os.system(f'(sleep 160 && wtype -M ctrl w -m ctrl)&')
+    os.system(f'(sleep {SKJERM_TIMEOUT_SEKUNDER} && wtype -M ctrl w -m ctrl)&')
     print("Aktiverer kakebot...")
 
-def er_kake(melding: KakeMelding):
-    return (melding.image_url or "kake" in melding.text.lower()) and ("http" not in melding.text.lower() and "allmøte" not in melding.text.lower())
+def er_kake(melding: Melding):
+    MAX_TEXT_LENGTH = 250
+    text = melding.text.lower()
+    return (melding.image_url or "kake" in text) and len(text) < MAX_TEXT_LENGTH
 
 slack_app = App(token=os.getenv("SLACK_BOT_TOKEN"))
 
 @slack_app.event("message")
 def handle_message_events(body, logger):
-    print("Received message event:", body)
     event = body.get("event", {})
-    subtype = event.get("subtype", None)
     text = event.get("text", "")
+    is_thread = event.get("thread_ts", None) is not None
     image_url = event.get("files", [{}])[0].get("url_private", "")
-    melding = KakeMelding(text=text, image_url=image_url)
+    print(f"Mottatt melding: {text}, bilde_url: {image_url}, thread: {is_thread}")
+    melding = Melding(text=text, image_url=image_url)
 
-    if subtype is None and er_kake(melding):
+    if not is_thread and melding.er_kake():
         activate_kakebot(melding)
 
 def start_slack_app():
     try:
-        SocketModeHandler(slack_app, os.environ["SLACK_APP_TOKEN"]).start()
+        SocketModeHandler(slack_app, SLACK_APP_TOKEN).start()
     except:
         pass
 
